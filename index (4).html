@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Класс и семья — конструктор страницы для родителей</title>
+<style>
+:root{color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#f4f8ff;color:#14213d;font-family:Inter,"Segoe UI",Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+#familyClassApp{--blue:#1f63db;--blue2:#eaf2ff;--ink:#14213d;--muted:#667085;--line:#d9e4f3;--card:#fff;--green:#118b67;--orange:#e88b18;--red:#dd3650;--violet:#7a55d8;--cyan:#0d8798;max-width:1540px;margin:0 auto;background:#f8fbff;min-height:100vh;container-type:inline-size;font-family:Inter,"Segoe UI",Arial,sans-serif;box-shadow:0 0 0 1px #eaf0f8}
+#familyClassApp .fc-toolbar{position:sticky;top:0;z-index:50;display:flex;gap:10px;align-items:center;padding:12px 18px;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+#familyClassApp .fc-brand{display:flex;align-items:center;gap:10px;min-width:270px}
+#familyClassApp .fc-brandmark{width:42px;height:42px;border-radius:12px;background:linear-gradient(145deg,#eaf4ff,#fff);display:grid;place-items:center;border:1px solid #cfe0fb;font-size:24px}
+#familyClassApp .fc-brand strong{display:block;font-size:19px;color:#174a9f}
+#familyClassApp .fc-brand small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+#familyClassApp .fc-actions{display:flex;gap:8px;flex:1;justify-content:center;flex-wrap:wrap}
+#familyClassApp .fc-help-slot{min-width:180px;flex:0 0 180px;display:flex;align-items:center;justify-content:flex-end}
+#familyClassApp .fc-help-icon{width:42px;height:42px;border:1px solid #cfdbee;background:#fff;color:#1d2d4f;border-radius:50%;display:inline-grid;place-items:center;font-size:22px;font-weight:900;line-height:1;box-shadow:0 2px 6px rgba(36,68,120,.05);padding:0}
+#familyClassApp .fc-help-icon:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(36,68,120,.10);background:#f7faff}
+#familyClassApp .fc-btn{border:1px solid #cfdbee;background:#fff;color:#1d2d4f;border-radius:10px;padding:10px 14px;display:inline-flex;align-items:center;gap:7px;font-weight:700;box-shadow:0 2px 6px rgba(36,68,120,.05);white-space:nowrap}
+#familyClassApp .fc-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(36,68,120,.10)}
+#familyClassApp .fc-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+#familyClassApp .fc-btn.pdf{background:#0f9b73;border-color:#0f9b73;color:#fff}
+#familyClassApp .fc-btn.png{background:#7654d8;border-color:#7654d8;color:#fff}
+#familyClassApp .fc-page{padding:18px}
+#familyClassApp .fc-hero{display:grid;grid-template-columns:280px 1fr 430px;gap:24px;align-items:stretch;padding:22px;border:1px solid #cfe0f6;border-radius:18px;background:linear-gradient(110deg,#f4f9ff 0%,#fff 48%,#eef7ff 100%);overflow:hidden;position:relative}
+#familyClassApp .fc-hero:after{content:"";position:absolute;right:-80px;bottom:-120px;width:320px;height:320px;background:radial-gradient(circle,#dceeff 0 40%,transparent 41%);opacity:.55;pointer-events:none}
+#familyClassApp .fc-meta{display:grid;gap:10px;align-content:start}
+#familyClassApp .fc-field-label{font-size:12px;color:#63718a;margin-bottom:4px}
+#familyClassApp .fc-inline-field{position:relative;background:#fff;border:1px solid #cfdcf0;border-radius:9px;padding:9px 11px;min-height:38px}
+#familyClassApp .fc-inline-field [data-edit]{display:block;min-height:20px}
+#familyClassApp .fc-hero-copy{align-self:center;padding:6px 0}
+#familyClassApp .fc-hero-copy h1{margin:0 0 12px;font-size:42px;line-height:1.05;color:#0c255d;letter-spacing:-.03em}
+#familyClassApp .fc-hero-copy p{font-size:15px;line-height:1.55;margin:0 0 8px;color:#203453}
+#familyClassApp .fc-visual{position:relative;min-height:210px;border-radius:16px;overflow:hidden;border:1px solid #cbd9ec;background:linear-gradient(135deg,#dfeefe,#fff);display:grid;place-items:center}
+#familyClassApp .fc-visual img{width:100%;height:100%;object-fit:cover;display:block}
+#familyClassApp .fc-placeholder-art{width:100%;height:100%;display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(135deg,#dbeaff,#fefefe 55%,#e6f5f0)}
+#familyClassApp .fc-placeholder-art .big{font-size:58px;margin-bottom:8px}
+#familyClassApp .fc-placeholder-art strong{font-size:19px;color:#244a80}
+#familyClassApp .fc-placeholder-art small{display:block;color:#6b7890;margin-top:6px}
+#familyClassApp .fc-upload{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:2}
+#familyClassApp .fc-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;margin-top:16px}
+#familyClassApp .fc-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 3px 10px rgba(26,67,120,.035);position:relative;min-width:0}
+#familyClassApp .fc-card.red{border-color:#f2adb9;background:linear-gradient(160deg,#fff,#fff7f9)}
+#familyClassApp .fc-card.orange{border-color:#f0c68b;background:linear-gradient(160deg,#fff,#fffaf3)}
+#familyClassApp .fc-card.green{border-color:#b9d79d;background:linear-gradient(160deg,#fff,#fbfff7)}
+#familyClassApp .fc-card.blue{border-color:#b9d2f7;background:linear-gradient(160deg,#fff,#f7fbff)}
+#familyClassApp .fc-card.violet{border-color:#d2c2ef;background:linear-gradient(160deg,#fff,#fbf9ff)}
+#familyClassApp .fc-card.cyan{border-color:#b6dfe6;background:linear-gradient(160deg,#fff,#f8feff)}
+#familyClassApp .span-12{grid-column:span 12}
+#familyClassApp .span-8{grid-column:span 8}
+#familyClassApp .span-7{grid-column:span 7}
+#familyClassApp .span-6{grid-column:span 6}
+#familyClassApp .span-5{grid-column:span 5}
+#familyClassApp .span-4{grid-column:span 4}
+#familyClassApp .span-3{grid-column:span 3}
+#familyClassApp .fc-card-head{display:flex;align-items:center;gap:8px;margin-bottom:14px;min-height:30px}
+#familyClassApp .fc-chip{font-size:12px;font-weight:800;letter-spacing:.02em;color:#fff;padding:6px 10px;border-radius:8px;text-transform:uppercase}
+#familyClassApp .red .fc-chip{background:var(--red)}
+#familyClassApp .orange .fc-chip{background:var(--orange)}
+#familyClassApp .green .fc-chip{background:var(--green)}
+#familyClassApp .blue .fc-chip{background:var(--blue)}
+#familyClassApp .violet .fc-chip{background:var(--violet)}
+#familyClassApp .cyan .fc-chip{background:var(--cyan)}
+#familyClassApp .fc-card-tools{margin-left:auto;display:flex;gap:6px;align-items:center}
+#familyClassApp .fc-mini{border:1px solid #ced9ea;background:#fff;border-radius:8px;padding:6px 9px;color:#2a3b5a;font-size:12px;font-weight:700}
+#familyClassApp .fc-mini.danger{color:#c52f48;border-color:#f1c3cb}
+#familyClassApp .fc-card h2{font-size:24px;line-height:1.15;margin:2px 0 10px;color:#172a55}
+#familyClassApp .fc-card h3{font-size:18px;line-height:1.25;margin:0 0 8px;color:#243b66}
+#familyClassApp .fc-card p{margin:5px 0;color:#32445f;line-height:1.5}
+#familyClassApp .fc-card ul{margin:8px 0 0;padding-left:20px}
+#familyClassApp .fc-card li{margin:7px 0;line-height:1.4}
+#familyClassApp .fc-announcement{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:center}
+#familyClassApp .fc-megaphone{font-size:76px;text-align:center;filter:drop-shadow(0 5px 6px rgba(221,54,80,.15))}
+#familyClassApp .fc-meta-line{display:flex;flex-wrap:wrap;gap:16px;color:#506078;font-weight:700;margin:7px 0 10px}
+#familyClassApp .fc-emphasis{color:var(--red)!important;font-style:italic}
+#familyClassApp .fc-list{display:grid;gap:8px}
+#familyClassApp .fc-event{display:grid;grid-template-columns:38px 100px 1fr 30px;gap:8px;align-items:center;padding:7px 0;border-bottom:1px dashed #e1e7f0}
+#familyClassApp .fc-event:last-child{border-bottom:0}
+#familyClassApp .fc-date-dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#fff1d9;color:#d77908;font-size:11px;font-weight:800}
+#familyClassApp .fc-checklist{display:grid;gap:9px}
+#familyClassApp .fc-check{display:grid;grid-template-columns:22px 1fr 30px;gap:8px;align-items:start}
+#familyClassApp .fc-checkmark{color:var(--green);font-weight:900;font-size:18px}
+#familyClassApp .fc-add{margin-top:10px;border:1px solid currentColor;background:#fff;border-radius:9px;padding:8px 11px;color:var(--blue);font-weight:700;font-size:13px}
+#familyClassApp .fc-schedule-wrap{overflow:auto;border-radius:10px;border:1px solid #d8e3f3;background:#fff}
+#familyClassApp table{width:100%;border-collapse:collapse;min-width:760px;font-size:12px}
+#familyClassApp th,#familyClassApp td{border-right:1px solid #d8e3f3;border-bottom:1px solid #d8e3f3;padding:8px;text-align:center;min-width:100px}
+#familyClassApp th{background:#eaf2ff;color:#193b74;font-weight:800;position:sticky;top:0}
+#familyClassApp td:first-child,#familyClassApp th:first-child{min-width:42px;width:42px;background:#f8fbff;font-weight:800}
+#familyClassApp .fc-schedule-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#familyClassApp .fc-tip{display:grid;grid-template-columns:minmax(150px,190px) 1fr;gap:20px;align-items:center}
+#familyClassApp .fc-tip-visual-wrap{display:grid;gap:10px;align-content:start}
+#familyClassApp .fc-tip-art{position:relative;min-height:170px;border-radius:14px;background:linear-gradient(135deg,#eee7ff,#fff);display:grid;place-items:center;overflow:hidden;border:1px solid #ddd2f6}
+#familyClassApp .fc-tip-art img{width:100%;height:100%;object-fit:contain;display:block;background:#fff}
+#familyClassApp .fc-tip-placeholder{display:grid;place-items:center;padding:16px;text-align:center;color:#6d67a8}
+#familyClassApp .fc-tip-placeholder svg{display:block;margin:0 auto 5px}
+#familyClassApp .fc-tip-placeholder strong{display:block;font-size:15px;color:#544b8e}
+#familyClassApp .fc-tip-placeholder small{display:block;font-size:11px;color:#7b7ba3;margin-top:4px}
+#familyClassApp .fc-tip-upload{justify-self:start}
+#familyClassApp .fc-bullets{display:grid;gap:8px}
+#familyClassApp .fc-bullet{display:flex;gap:9px;align-items:flex-start}
+#familyClassApp .fc-bullet:before{content:"●";font-size:12px;color:var(--violet);margin-top:4px}
+#familyClassApp .fc-links{display:grid;grid-template-columns:1fr;gap:8px}
+#familyClassApp .fc-link-item{display:grid;grid-template-columns:minmax(0,1fr) 29px 29px;gap:6px;align-items:center;min-width:0}
+#familyClassApp .fc-link-card{display:flex;gap:8px;align-items:center;min-width:0;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none;border:1px solid #d9e4f3;background:#fff;border-radius:9px;padding:9px 10px;color:#2151a6;text-decoration:none;font-size:13px;font-weight:700;min-height:42px}
+#familyClassApp .fc-material{display:grid;grid-template-columns:30px 1fr auto 28px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed #e2e8f1}
+#familyClassApp .fc-material:last-child{border-bottom:0}
+#familyClassApp .fc-open{border:1px solid #bcd2f5;background:#fff;border-radius:8px;padding:6px 10px;color:#1e59bb;font-weight:700;text-decoration:none;font-size:12px}
+#familyClassApp .fc-agreements{display:grid;grid-template-columns:1fr;gap:14px}
+#familyClassApp .fc-contact{display:grid;gap:10px}
+#familyClassApp .fc-contact-row{display:flex;gap:8px;align-items:flex-start}
+#familyClassApp .fc-contact-icon{font-size:20px}
+#familyClassApp .fc-rules{border-left:0;border-top:1px solid #d8e6ea;padding-left:0;padding-top:14px}
+#familyClassApp .fc-feedback{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:start}
+#familyClassApp .fc-bubble{text-align:center;display:grid;place-items:center}
+#familyClassApp .fc-feedback-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+#familyClassApp .fc-feedback-item{display:flex;align-items:center;gap:5px;min-width:0}
+#familyClassApp .fc-feedback-item .fc-open{flex:1;text-align:center;min-height:42px;display:grid;place-items:center}
+#familyClassApp .fc-footer-note{margin-top:16px;padding:10px 14px;border:1px solid #cfe0f6;border-radius:12px;background:#f3f8ff;color:#285694;font-size:13px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+
+#familyClassApp .edit-only{display:none!important}
+#familyClassApp.edit-mode .edit-only{display:inline-flex!important}
+#familyClassApp.edit-mode .fc-add.edit-only{display:inline-block!important}
+#familyClassApp .preview-only{display:none}
+#familyClassApp.preview-mode .fc-toolbar{display:none}
+#familyClassApp.preview-mode .fc-page{padding-top:18px}
+#familyClassApp.preview-mode .edit-only{display:none!important}
+#familyClassApp .fc-hidden{display:none!important}
+#familyClassApp.edit-mode .fc-card.fc-soft-hidden{display:block!important;opacity:.46;filter:grayscale(.45)}
+#familyClassApp .fc-card.fc-soft-hidden:after{content:"Блок скрыт для родителей";position:absolute;inset:0;display:grid;place-items:center;background:rgba(255,255,255,.78);border-radius:16px;color:#5d6d86;font-weight:800;font-size:14px;pointer-events:none}
+#familyClassApp.edit-mode .fc-card.fc-soft-hidden .fc-card-tools{position:relative;z-index:3}
+#familyClassApp .fc-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;z-index:1000;background:#163866;color:#fff;padding:11px 16px;border-radius:10px;box-shadow:0 10px 30px rgba(12,39,78,.25);transition:.2s;pointer-events:none;font-size:13px}
+#familyClassApp .fc-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#familyClassApp .fc-modal{position:fixed;inset:0;background:rgba(15,35,70,.45);z-index:900;display:none;place-items:center;padding:20px}
+#familyClassApp .fc-modal.open{display:grid}
+#familyClassApp .fc-modal-card{width:min(560px,100%);max-height:86vh;overflow:auto;background:#fff;border-radius:16px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+#familyClassApp .fc-modal-card h3{margin:0 0 12px;color:#17386f}
+#familyClassApp .fc-form{display:grid;gap:10px}
+#familyClassApp .fc-form label{display:grid;gap:5px;font-size:12px;color:#63718a;font-weight:700}
+#familyClassApp .fc-form input,#familyClassApp .fc-form textarea,#familyClassApp .fc-form select{width:100%;border:1px solid #ccd9eb;border-radius:9px;padding:10px 11px;color:#22395d;background:#fff}
+#familyClassApp .fc-form textarea{min-height:90px;resize:vertical}
+#familyClassApp .fc-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+#familyClassApp .fc-help-step{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;padding:9px 0;border-bottom:1px dashed #e2e8f1}
+#familyClassApp .fc-help-step:last-child{border-bottom:0}
+#familyClassApp .fc-help-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#eaf2ff;color:#2455a7;font-weight:800}
+#familyClassApp .fc-mobile-title{display:none}
+#familyClassApp.export-clean .fc-toolbar,#familyClassApp.export-clean .edit-only,#familyClassApp.export-clean .fc-footer-note{display:none!important}
+#familyClassApp.export-clean .fc-page{padding:0}
+#familyClassApp.export-clean{box-shadow:none;background:#fff}
+#familyClassApp.export-clean .fc-card{break-inside:avoid}
+#familyClassApp.export-layout{width:1400px!important;max-width:1400px!important}
+#familyClassApp.export-layout .fc-page{padding:18px!important}
+#familyClassApp.export-layout .fc-hero{grid-template-columns:260px 1fr 390px!important}
+#familyClassApp.export-layout .fc-grid{grid-template-columns:repeat(12,minmax(0,1fr))!important}
+#familyClassApp.export-layout .span-8{grid-column:span 8!important}
+#familyClassApp.export-layout .span-7{grid-column:span 7!important}
+#familyClassApp.export-layout .span-6{grid-column:span 6!important}
+#familyClassApp.export-layout .span-5{grid-column:span 5!important}
+#familyClassApp.export-layout .span-4{grid-column:span 4!important}
+#familyClassApp.export-layout .span-3{grid-column:span 3!important}
+#familyClassApp.export-layout .fc-links{grid-template-columns:1fr!important}
+#familyClassApp.export-layout .fc-schedule-wrap{overflow:visible!important}
+#familyClassApp.export-layout table{min-width:0!important;width:100%!important}
+#familyClassApp.export-layout th,#familyClassApp.export-layout td{min-width:0!important;padding:7px 5px!important;font-size:11px!important}
+
+#familyClassApp .fc-hero-edit{margin-top:8px;justify-self:start}
+#familyClassApp .fc-item-actions{display:flex;gap:5px;align-items:center;justify-content:flex-end}
+#familyClassApp .fc-icon-btn{border:1px solid #d5e0ef;background:#fff;border-radius:8px;width:29px;height:29px;display:inline-grid;place-items:center;color:#31598f;font-weight:800;padding:0;line-height:1}
+#familyClassApp .fc-icon-btn:hover{background:#eef5ff}
+#familyClassApp .fc-icon-btn.danger{color:#c9364f;border-color:#f0c4cc}
+#familyClassApp .fc-preview-exit{display:none;position:fixed;right:18px;bottom:18px;z-index:1200;border:0;border-radius:999px;background:#174ea6;color:#fff;padding:12px 18px;font-weight:800;box-shadow:0 10px 26px rgba(17,62,132,.25)}
+#familyClassApp.preview-mode .fc-preview-exit{display:inline-flex}
+#familyClassApp .fc-schedule-editor{overflow:auto;border:1px solid #d6e1f0;border-radius:12px;background:#f8fbff;padding:10px}
+#familyClassApp .fc-schedule-editor table{min-width:760px;background:#fff}
+#familyClassApp .fc-schedule-editor input{width:100%;min-width:105px;border:1px solid #d4dfef;border-radius:7px;padding:7px 8px}
+#familyClassApp .fc-soft-note{font-size:12px;color:#667085;background:#f6f9fd;border:1px solid #e0e7f1;border-radius:9px;padding:9px 10px}
+
+@media(max-width:1199px){
+  #familyClassApp .fc-toolbar{padding:10px 12px;align-items:flex-start}
+  #familyClassApp .fc-brand{min-width:220px}
+  #familyClassApp .fc-actions{justify-content:flex-end}
+  #familyClassApp .fc-help-slot{min-width:46px;flex:0 0 46px;display:flex}
+  #familyClassApp .fc-hero{grid-template-columns:230px 1fr;gap:18px}
+  #familyClassApp .fc-visual{grid-column:1/-1;min-height:220px}
+  #familyClassApp .span-8,#familyClassApp .span-7,#familyClassApp .span-5,#familyClassApp .span-4,#familyClassApp .span-3{grid-column:span 6}
+  #familyClassApp .span-12{grid-column:span 12}
+  #familyClassApp .fc-agreements{grid-template-columns:1fr}
+  #familyClassApp .fc-rules{border-left:0;border-top:1px solid #d8e6ea;padding-left:0;padding-top:14px}
+}
+@media(max-width:767px){
+  body{background:#f6f9fe}
+  #familyClassApp{width:100%;min-width:0;box-shadow:none}
+  #familyClassApp .fc-toolbar{position:sticky;top:0;display:block;padding:8px;background:#fff}
+  #familyClassApp .fc-toolbar{position:sticky}
+  #familyClassApp .fc-help-slot{position:absolute;right:8px;top:8px;min-width:0;width:36px;display:flex;z-index:2}
+  #familyClassApp .fc-help-icon{width:36px;height:36px;font-size:19px}
+  #familyClassApp .fc-brand{min-width:0;justify-content:center;margin-bottom:8px}
+  #familyClassApp .fc-brand small{display:none}
+  #familyClassApp .fc-brand strong{font-size:17px}
+  #familyClassApp .fc-brandmark{width:36px;height:36px;font-size:20px}
+  #familyClassApp .fc-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  #familyClassApp .fc-btn{justify-content:center;padding:9px 8px;font-size:12px}
+  #familyClassApp .fc-page{padding:10px}
+  #familyClassApp .fc-hero{grid-template-columns:1fr;padding:16px;gap:15px;border-radius:14px}
+  #familyClassApp .fc-meta{order:2;grid-template-columns:1fr 1fr}
+  #familyClassApp .fc-meta .fc-meta-full{grid-column:1/-1}
+  #familyClassApp .fc-hero-copy{order:1}
+  #familyClassApp .fc-hero-copy h1{font-size:32px}
+  #familyClassApp .fc-hero-copy p{font-size:14px}
+  #familyClassApp .fc-visual{order:3;grid-column:auto;min-height:190px}
+  #familyClassApp .fc-grid{grid-template-columns:1fr;gap:12px;margin-top:12px}
+  #familyClassApp .span-12,#familyClassApp .span-8,#familyClassApp .span-7,#familyClassApp .span-6,#familyClassApp .span-5,#familyClassApp .span-4,#familyClassApp .span-3{grid-column:auto}
+  #familyClassApp .fc-card{padding:13px;border-radius:14px}
+  #familyClassApp .fc-card-head{align-items:flex-start;flex-wrap:wrap}
+  #familyClassApp .fc-card-tools{width:100%;margin-left:0;justify-content:flex-end;flex-wrap:wrap}
+  #familyClassApp .fc-chip{font-size:11px}
+  #familyClassApp .fc-announcement{grid-template-columns:72px 1fr;gap:10px}
+  #familyClassApp .fc-megaphone{font-size:54px}
+  #familyClassApp .fc-card h2{font-size:20px}
+  #familyClassApp .fc-event{grid-template-columns:32px 82px 1fr 26px;font-size:13px}
+  #familyClassApp .fc-tip{grid-template-columns:1fr}
+  #familyClassApp .fc-tip-art{min-height:150px}
+  #familyClassApp .fc-links{grid-template-columns:1fr}
+  #familyClassApp .fc-material{grid-template-columns:28px 1fr 26px}
+  #familyClassApp .fc-material .fc-open{grid-column:2/3;justify-self:start}
+  #familyClassApp .fc-agreements{grid-template-columns:1fr}
+  #familyClassApp .fc-feedback{grid-template-columns:1fr;gap:10px}
+  #familyClassApp .fc-bubble{justify-self:center}
+  #familyClassApp .fc-feedback-actions{grid-template-columns:1fr}
+
+  #familyClassApp .fc-footer-note{font-size:12px;align-items:flex-start}
+}
+
+@container (max-width:1199px){
+  #familyClassApp .fc-toolbar{padding:10px 12px;align-items:flex-start}
+  #familyClassApp .fc-brand{min-width:220px}
+  #familyClassApp .fc-actions{justify-content:flex-end}
+  #familyClassApp .fc-help-slot{min-width:46px;flex:0 0 46px;display:flex}
+  #familyClassApp .fc-hero{grid-template-columns:230px 1fr;gap:18px}
+  #familyClassApp .fc-visual{grid-column:1/-1;min-height:220px}
+  #familyClassApp .span-8,#familyClassApp .span-7,#familyClassApp .span-5,#familyClassApp .span-4,#familyClassApp .span-3{grid-column:span 6}
+  #familyClassApp .span-12{grid-column:span 12}
+}
+@container (max-width:767px){
+  #familyClassApp .fc-toolbar{position:sticky;top:0;display:block;padding:8px;background:#fff}
+  #familyClassApp .fc-toolbar{position:sticky}
+  #familyClassApp .fc-help-slot{position:absolute;right:8px;top:8px;min-width:0;width:36px;display:flex;z-index:2}
+  #familyClassApp .fc-help-icon{width:36px;height:36px;font-size:19px}
+  #familyClassApp .fc-brand{min-width:0;justify-content:center;margin-bottom:8px}
+  #familyClassApp .fc-brand small{display:none}
+  #familyClassApp .fc-brand strong{font-size:17px}
+  #familyClassApp .fc-brandmark{width:36px;height:36px}
+  #familyClassApp .fc-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  #familyClassApp .fc-btn{justify-content:center;padding:9px 8px;font-size:12px}
+  #familyClassApp .fc-page{padding:10px}
+  #familyClassApp .fc-hero{grid-template-columns:1fr;padding:16px;gap:15px;border-radius:14px}
+  #familyClassApp .fc-meta{order:2;grid-template-columns:1fr 1fr}
+  #familyClassApp .fc-meta .fc-meta-full{grid-column:1/-1}
+  #familyClassApp .fc-hero-copy{order:1}
+  #familyClassApp .fc-hero-copy h1{font-size:32px}
+  #familyClassApp .fc-hero-copy p{font-size:14px}
+  #familyClassApp .fc-visual{order:3;grid-column:auto;min-height:190px}
+  #familyClassApp .fc-grid{grid-template-columns:1fr;gap:12px;margin-top:12px}
+  #familyClassApp .span-12,#familyClassApp .span-8,#familyClassApp .span-7,#familyClassApp .span-6,#familyClassApp .span-5,#familyClassApp .span-4,#familyClassApp .span-3{grid-column:auto}
+  #familyClassApp .fc-card{padding:13px;border-radius:14px}
+  #familyClassApp .fc-card-head{align-items:flex-start;flex-wrap:wrap}
+  #familyClassApp .fc-card-tools{width:100%;margin-left:0;justify-content:flex-end;flex-wrap:wrap}
+  #familyClassApp .fc-chip{font-size:11px}
+  #familyClassApp .fc-announcement{grid-template-columns:72px 1fr;gap:10px}
+  #familyClassApp .fc-megaphone svg{width:58px;height:58px}
+  #familyClassApp .fc-card h2{font-size:20px}
+  #familyClassApp .fc-event{grid-template-columns:32px 76px minmax(0,1fr) auto;font-size:13px}
+  #familyClassApp .fc-tip{grid-template-columns:1fr}
+  #familyClassApp .fc-tip-art{min-height:150px}
+  #familyClassApp .fc-links{grid-template-columns:1fr}
+  #familyClassApp .fc-material{grid-template-columns:28px minmax(0,1fr) auto auto}
+  #familyClassApp .fc-feedback{grid-template-columns:1fr;gap:10px}
+  #familyClassApp .fc-bubble{justify-self:center}
+  #familyClassApp .fc-feedback-actions{grid-template-columns:1fr}
+  #familyClassApp .fc-footer-note{font-size:12px;align-items:flex-start}
+}
+
+
+/* Изолированный экспорт одной карточки: карточка больше не растягивается по высоте соседней строки grid */
+#familyClassApp.export-card-layout{width:920px!important;max-width:920px!important;min-height:0!important;background:#fff!important;box-shadow:none!important;padding:0!important}
+#familyClassApp.export-card-layout .fc-card{width:100%!important;height:auto!important;min-height:0!important;align-self:start!important;grid-column:auto!important;margin:0!important;padding:22px!important;box-shadow:none!important}
+#familyClassApp.export-card-layout .fc-card-head{margin-bottom:16px!important}
+#familyClassApp.export-card-layout .fc-card h2{font-size:30px!important;line-height:1.15!important}
+#familyClassApp.export-card-layout .fc-card h3{font-size:22px!important}
+#familyClassApp.export-card-layout .fc-card p{font-size:17px!important;line-height:1.45!important}
+#familyClassApp.export-card-layout .fc-meta-line{font-size:17px!important;gap:18px!important}
+#familyClassApp.export-card-layout .fc-announcement{grid-template-columns:120px minmax(0,1fr)!important;gap:22px!important;align-items:center!important}
+#familyClassApp.export-card-layout .fc-event{font-size:15px!important;grid-template-columns:38px 120px minmax(0,1fr)!important}
+#familyClassApp.export-card-layout .fc-check{grid-template-columns:24px minmax(0,1fr)!important;font-size:16px!important}
+#familyClassApp.export-card-layout .fc-tip{grid-template-columns:220px minmax(0,1fr)!important;gap:24px!important}
+#familyClassApp.export-card-layout .fc-tip-art{min-height:210px!important}
+#familyClassApp.export-card-layout .fc-bullet{font-size:16px!important}
+#familyClassApp.export-card-layout .fc-schedule-wrap{overflow:visible!important}
+#familyClassApp.export-card-layout table{min-width:0!important;width:100%!important;font-size:13px!important}
+#familyClassApp.export-card-layout th,#familyClassApp.export-card-layout td{min-width:0!important;padding:8px 6px!important}
+
+/* Специальная A4-компоновка полной страницы: те же данные, но без большого пустого низа */
+#familyClassApp.pdf-export-layout{width:1060px!important;max-width:1060px!important;min-height:0!important;background:#fff!important;box-shadow:none!important}
+#familyClassApp.pdf-export-layout #parentPage{width:1060px!important;min-height:1499px!important;padding:14px!important;display:flex!important;flex-direction:column!important;background:#fff!important}
+#familyClassApp.pdf-export-layout .fc-hero{grid-template-columns:205px minmax(0,1fr) 315px!important;gap:16px!important;padding:16px!important;border-radius:14px!important}
+#familyClassApp.pdf-export-layout .fc-hero-copy h1{font-size:34px!important;margin-bottom:8px!important}
+#familyClassApp.pdf-export-layout .fc-hero-copy p{font-size:12.5px!important;line-height:1.4!important;margin-bottom:5px!important}
+#familyClassApp.pdf-export-layout .fc-visual{min-height:175px!important}
+#familyClassApp.pdf-export-layout .fc-grid{grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:12px!important;margin-top:12px!important;flex:1!important;align-content:space-between!important}
+#familyClassApp.pdf-export-layout .fc-card{padding:12px!important;border-radius:13px!important;box-shadow:none!important;align-self:start!important}
+#familyClassApp.pdf-export-layout .fc-card-head{margin-bottom:9px!important;min-height:26px!important}
+#familyClassApp.pdf-export-layout .fc-chip{font-size:9.5px!important;padding:5px 8px!important}
+#familyClassApp.pdf-export-layout .fc-card h2{font-size:19px!important;margin:1px 0 7px!important}
+#familyClassApp.pdf-export-layout .fc-card h3{font-size:15px!important;margin-bottom:6px!important}
+#familyClassApp.pdf-export-layout .fc-card p{font-size:11.5px!important;line-height:1.35!important;margin:3px 0!important}
+#familyClassApp.pdf-export-layout .fc-meta-line{font-size:11.5px!important;gap:11px!important;margin:5px 0 7px!important}
+#familyClassApp.pdf-export-layout .fc-announcement{grid-template-columns:82px minmax(0,1fr)!important;gap:12px!important}
+#familyClassApp.pdf-export-layout .fc-megaphone svg{width:66px!important;height:66px!important}
+#familyClassApp.pdf-export-layout .fc-event{grid-template-columns:30px 85px minmax(0,1fr)!important;gap:6px!important;font-size:11.5px!important;padding:5px 0!important}
+#familyClassApp.pdf-export-layout .fc-check{grid-template-columns:20px minmax(0,1fr)!important;font-size:11.5px!important;gap:6px!important}
+#familyClassApp.pdf-export-layout .fc-checkmark{font-size:15px!important}
+#familyClassApp.pdf-export-layout .fc-schedule-wrap{overflow:visible!important}
+#familyClassApp.pdf-export-layout table{min-width:0!important;width:100%!important;font-size:9.5px!important}
+#familyClassApp.pdf-export-layout th,#familyClassApp.pdf-export-layout td{min-width:0!important;padding:5px 3px!important}
+#familyClassApp.pdf-export-layout .fc-tip{grid-template-columns:150px minmax(0,1fr)!important;gap:13px!important}
+#familyClassApp.pdf-export-layout .fc-tip-art{min-height:140px!important}
+#familyClassApp.pdf-export-layout .fc-bullet{font-size:11.2px!important;gap:6px!important}
+#familyClassApp.pdf-export-layout .fc-links{grid-template-columns:1fr!important;gap:6px!important}
+#familyClassApp.pdf-export-layout .fc-link-item{grid-template-columns:1fr!important}
+#familyClassApp.pdf-export-layout .fc-link-card{font-size:10.5px!important;min-height:32px!important;padding:6px 8px!important}
+#familyClassApp.pdf-export-layout .fc-material{font-size:10.8px!important;padding:6px 0!important;grid-template-columns:24px minmax(0,1fr) auto!important}
+#familyClassApp.pdf-export-layout .fc-open{font-size:9.5px!important;padding:5px 7px!important}
+#familyClassApp.pdf-export-layout .fc-contact{gap:7px!important;font-size:10.8px!important}
+#familyClassApp.pdf-export-layout .fc-contact-icon{font-size:16px!important}
+#familyClassApp.pdf-export-layout .fc-rules{padding-top:9px!important}
+#familyClassApp.pdf-export-layout .fc-feedback{grid-template-columns:52px minmax(0,1fr)!important;gap:9px!important}
+#familyClassApp.pdf-export-layout .fc-bubble svg{width:44px!important;height:44px!important}
+#familyClassApp.pdf-export-layout .fc-feedback-actions{gap:6px!important;margin-top:8px!important}
+#familyClassApp.pdf-export-layout .fc-feedback-item .fc-open{min-height:32px!important}
+#familyClassApp.pdf-export-layout [data-card="actual"]{grid-column:span 5!important}
+#familyClassApp.pdf-export-layout [data-card="dates"]{grid-column:span 4!important}
+#familyClassApp.pdf-export-layout [data-card="important"]{grid-column:span 3!important}
+#familyClassApp.pdf-export-layout [data-card="schedule"]{grid-column:span 7!important}
+#familyClassApp.pdf-export-layout [data-card="tip"]{grid-column:span 5!important}
+#familyClassApp.pdf-export-layout [data-card="links"]{grid-column:span 6!important}
+#familyClassApp.pdf-export-layout [data-card="materials"]{grid-column:span 6!important}
+#familyClassApp.pdf-export-layout [data-card="agreements"]{grid-column:span 6!important}
+#familyClassApp.pdf-export-layout [data-card="feedback"]{grid-column:span 6!important}
+
+@media print{
+  body{background:#fff!important}
+  #familyClassApp{max-width:none;box-shadow:none;background:#fff}
+  #familyClassApp .fc-toolbar,#familyClassApp .edit-only,#familyClassApp .fc-footer-note{display:none!important}
+  #familyClassApp .fc-page{padding:0}
+  #familyClassApp .fc-card{break-inside:avoid;box-shadow:none}
+  @page{size:A4 portrait;margin:8mm}
+}
+</style>
+</head>
+<body>
+<div id="familyClassApp" class="edit-mode">
+  <div class="fc-toolbar">
+    <div class="fc-brand">
+      <div class="fc-brandmark"><svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><circle cx="10" cy="9" r="4" fill="#2f6edb"/><circle cx="22" cy="9" r="4" fill="#7a55d8"/><path d="M4 28c1-9 3-14 6-14s5 3 6 8c1-5 3-8 6-8s5 5 6 14" fill="none" stroke="#2f6edb" stroke-width="2.2" stroke-linecap="round"/><path d="M16 27s-7-4.5-7-9a4 4 0 0 1 7-2.5A4 4 0 0 1 23 18c0 4.5-7 9-7 9z" fill="#fff" stroke="#e24b67" stroke-width="2"/></svg></div>
+      <div><strong>Класс и семья</strong><small>конструктор страницы для родителей</small></div>
+    </div>
+    <div class="fc-actions">
+      <button class="fc-btn primary" id="editBtn">✎ Редактирование</button>
+      <button class="fc-btn" id="previewBtn">◉ Предпросмотр</button>
+      <button class="fc-btn pdf" id="pdfBtn">▣ Скачать PDF</button>
+      <button class="fc-btn png" id="pngBtn">▧ Скачать PNG</button>
+    </div>
+    <div class="fc-help-slot"><button class="fc-help-icon" id="helpBtn" type="button" title="Инструкция" aria-label="Открыть инструкцию">?</button></div>
+  </div>
+
+  <main class="fc-page" id="parentPage">
+    <section class="fc-hero" data-block="hero">
+      <div class="fc-meta">
+        <div>
+          <div class="fc-field-label">Класс</div>
+          <div class="fc-inline-field"><span data-key="className">7А класс</span></div>
+        </div>
+        <div>
+          <div class="fc-field-label">Учебный год</div>
+          <div class="fc-inline-field"><span data-key="schoolYear">2026–2027</span></div>
+        </div>
+        <div class="fc-meta-full">
+          <div class="fc-field-label">Классный руководитель</div>
+          <div class="fc-inline-field"><span data-key="teacherName">Классный руководитель</span></div>
+        </div>
+      </div>
+      <div class="fc-hero-copy">
+        <h1>Класс и семья</h1>
+        <p data-key="welcome1">Здравствуйте, дорогие родители!</p>
+        <p data-key="welcome2">Здесь собрана актуальная информация нашего класса: важные даты, объявления, полезные материалы и рекомендации.</p>
+        <p data-key="welcome3">Будем рады сотрудничеству!</p>
+        <button class="fc-mini edit-only fc-hero-edit" data-edit-card="hero">✎ Изменить данные</button>
+      </div>
+      <div class="fc-visual" id="heroVisual">
+        <div class="fc-placeholder-art" id="heroPlaceholder"><div><svg width="150" height="78" viewBox="0 0 150 78" aria-hidden="true"><rect x="48" y="25" width="54" height="42" rx="5" fill="#fff" stroke="#2f6edb" stroke-width="3"/><path d="M42 28 75 7l33 21" fill="none" stroke="#2f6edb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="70" y="45" width="12" height="22" rx="2" fill="#ffb84d"/><rect x="55" y="35" width="10" height="10" rx="2" fill="#d9e8ff"/><rect x="86" y="35" width="10" height="10" rx="2" fill="#d9e8ff"/><circle cx="24" cy="32" r="9" fill="#7a55d8"/><path d="M8 66c2-17 9-25 16-25s14 8 16 25" fill="#e9e1ff" stroke="#7a55d8" stroke-width="3"/><circle cx="126" cy="34" r="9" fill="#0f9b73"/><path d="M110 67c2-17 9-25 16-25s14 8 16 25" fill="#ddf5ed" stroke="#0f9b73" stroke-width="3"/></svg><strong>Изображение вашего класса</strong><small>Загрузите фотографию или тематическую картинку</small></div></div>
+        <img id="heroImage" alt="Изображение класса" style="display:none">
+        <label class="fc-btn fc-upload edit-only" for="heroFile">🖼 Изменить изображение</label>
+        <input id="heroFile" type="file" accept="image/*" hidden>
+      </div>
+    </section>
+
+    <section class="fc-grid">
+      <article class="fc-card red span-5" data-card="actual">
+        <div class="fc-card-head"><span class="fc-chip">Актуально</span><div class="fc-card-tools edit-only"><button class="fc-mini" data-edit-card="actual">✎ Изменить</button><button class="fc-mini" data-toggle-card="actual" title="Показать или скрыть">◉</button><button class="fc-mini" data-card-png="actual">⇧ PNG</button></div></div>
+        <div class="fc-announcement">
+          <div class="fc-megaphone"><svg width="86" height="86" viewBox="0 0 92 92" aria-hidden="true"><path d="M16 38h18l34-18v45L34 48H16z" fill="#ff6b6b" stroke="#d93650" stroke-width="4" stroke-linejoin="round"/><path d="M34 39v12" stroke="#fff" stroke-width="4"/><path d="M24 50l7 23h13l-7-25" fill="#2f6edb" stroke="#2457aa" stroke-width="4" stroke-linejoin="round"/><path d="M72 29l8-6M74 42h11M72 56l8 6" stroke="#ffb84d" stroke-width="4" stroke-linecap="round"/></svg></div>
+          <div>
+            <h2 data-key="actualTitle">Родительское собрание</h2>
+            <div class="fc-meta-line"><span>📅 <b data-key="actualDate">25 октября</b></span><span>◷ <b data-key="actualTime">18:00</b></span></div>
+            <p data-key="actualText">Встречаемся в кабинете №25. Обсудим организационные вопросы и планы на четверть.</p>
+            <p class="fc-emphasis" data-key="actualNote">Буду рада встрече!</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="fc-card orange span-4" data-card="dates">
+        <div class="fc-card-head"><span class="fc-chip">Важные даты</span><div class="fc-card-tools edit-only"><button class="fc-mini" data-toggle-card="dates">◉</button><button class="fc-mini" data-card-png="dates">⇧ PNG</button></div></div>
+        <div class="fc-list" id="eventsList"></div>
+        <button class="fc-add edit-only" id="addEventBtn">＋ Добавить событие</button>
+      </article>
+
+      <article class="fc-card green span-3" data-card="important">
+        <div class="fc-card-head"><span class="fc-chip" data-key="importantLabel">Важно знать</span><div class="fc-card-tools edit-only"><button class="fc-mini" data-edit-card="important">✎ Изменить</button><button class="fc-mini" data-toggle-card="important" title="Показать или скрыть">◉</button><button class="fc-mini" data-card-png="important">⇧ PNG</button></div></div>
+        <div class="fc-checklist" id="importantList"></div>
+        <button class="fc-add edit-only" id="addImportantBtn">＋ Добавить пункт</button>
+      </article>
+
+      <article class="fc-card blue span-7" data-card="schedule">
+        <div class="fc-card-head"><span class="fc-chip">Расписание</span><div class="fc-card-tools edit-only"><button class="fc-mini" data-edit-card="schedule">✎ Расписание</button><button class="fc-mini" data-toggle-card="schedule" title="Показать или скрыть">◉</button><button class="fc-mini" data-card-png="schedule">⇧ PNG</button></div></div>
+        <div id="scheduleTableMode">
+          <div class="fc-schedule-wrap"><table id="scheduleTable"><thead><tr><th>№</th><th>Понедельник</th><th>Вторник</th><th>Среда</th><th>Четверг</th><th>Пятница</th><th>Суббота</th></tr></thead><tbody></tbody></table></div>
+        </div>
+        <div id="scheduleImageMode" style="display:none"><img id="scheduleImage" alt="Расписание" style="display:block;max-width:100%;margin:auto;border-radius:10px"></div>
+        <div class="fc-schedule-actions edit-only"><button class="fc-mini" id="fillScheduleBtn">▦ Заполнить / изменить расписание</button><label class="fc-mini" for="scheduleFile">⇧ Загрузить изображение</label><input id="scheduleFile" type="file" accept="image/*" hidden><button class="fc-mini" id="scheduleTableBtn">Вернуть таблицу</button></div>
+      </article>
+
+      <article class="fc-card violet span-5" data-card="tip">
+        <div class="fc-card-head"><span class="fc-chip">Родителям на заметку</span><div class="fc-card-tools edit-only"><button class="fc-mini" data-edit-card="tip">✎ Изменить</button><button class="fc-mini" data-toggle-card="tip" title="Показать или скрыть">◉</button><button class="fc-mini" data-card-png="tip">⇧ PNG</button></div></div>
+        <div class="fc-tip">
+          <div class="fc-tip-visual-wrap">
+            <div class="fc-tip-art">
+              <div class="fc-tip-placeholder" id="tipPlaceholder"><div><svg width="118" height="86" viewBox="0 0 118 86" aria-hidden="true"><circle cx="36" cy="27" r="12" fill="#7a55d8"/><circle cx="82" cy="27" r="12" fill="#2f6edb"/><circle cx="59" cy="45" r="10" fill="#ffb84d"/><path d="M16 74c2-21 10-32 20-32 9 0 16 8 20 23" fill="#eee8ff" stroke="#7a55d8" stroke-width="3"/><path d="M102 74c-2-21-10-32-20-32-9 0-16 8-20 23" fill="#e5efff" stroke="#2f6edb" stroke-width="3"/><path d="M45 78c1-14 6-22 14-22s13 8 14 22" fill="#fff0d8" stroke="#e89b22" stroke-width="3"/></svg><strong>Иллюстрация</strong><small>Можно заменить своей картинкой</small></div></div>
+              <img id="tipImage" alt="Иллюстрация для родителей" style="display:none">
+            </div>
+            <label class="fc-mini edit-only fc-tip-upload" for="tipFile">🖼 Изменить картинку</label>
+            <input id="tipFile" type="file" accept="image/*" hidden>
+          </div>
+          <div>
+            <h3 data-key="tipTitle">Как поддержать ребёнка в учёбе</h3>
+            <div class="fc-bullets" id="tipsList"></div>
+            <button class="fc-add edit-only" id="addTipBtn">＋ Добавить рекомендацию</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="fc-card blue span-3" data-card="links">
+        <div class="fc-card-head"><span class="fc-chip">Полезные ссылки</span><div class="fc-card-tools edit-only"><button class="fc-mini" data-toggle-card="links">◉</button></div></div>
+        <div class="fc-links" id="linksList"></div>
+        <button class="fc-add edit-only" id="addLinkBtn">＋ Добавить ссылку</button>
+      </article>
+
+      <article class="fc-card violet span-3" data-card="materials">
+        <div class="fc-card-head"><span class="fc-chip">Материалы для родителей</span><div class="fc-card-tools edit-only"><button class="fc-mini" data-toggle-card="materials">◉</button></div></div>
+        <div id="materialsList"></div>
+        <button class="fc-add edit-only" id="addMaterialBtn">＋ Добавить материал</button>
+      </article>
+
+      <article class="fc-card cyan span-3" data-card="agreements">
+        <div class="fc-card-head"><span class="fc-chip">Наши договорённости</span><div class="fc-card-tools edit-only"><button class="fc-mini" data-edit-card="agreements">✎ Изменить</button><button class="fc-mini" data-toggle-card="agreements" title="Показать или скрыть">◉</button></div></div>
+        <div class="fc-agreements">
+          <div class="fc-contact">
+            <div class="fc-contact-row"><span class="fc-contact-icon">☎</span><div><b>Связь с классным руководителем</b><p data-key="contactPhone">+7 (900) 123-45-67</p></div></div>
+            <div class="fc-contact-row"><span class="fc-contact-icon">◷</span><div><b>Удобное время для связи</b><p data-key="contactTime">Пн–Пт с 17:00 до 20:00</p></div></div>
+            <div class="fc-contact-row"><span class="fc-contact-icon">◉</span><div><b>Основной канал связи</b><p data-key="contactChannel">Родительский чат</p></div></div>
+          </div>
+          <div class="fc-rules"><h3 data-key="rulesTitle">Наши правила общения</h3><div class="fc-bullets" id="rulesList"></div><button class="fc-add edit-only" id="addRuleBtn">＋ Добавить правило</button></div>
+        </div>
+      </article>
+
+      <article class="fc-card violet span-3" data-card="feedback">
+        <div class="fc-card-head"><span class="fc-chip">Обратная связь</span><div class="fc-card-tools edit-only"><button class="fc-mini" data-edit-card="feedback">✎ Изменить</button><button class="fc-mini" data-toggle-card="feedback" title="Показать или скрыть">◉</button></div></div>
+        <div class="fc-feedback">
+          <div class="fc-bubble"><svg width="58" height="58" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 13h44v31H31L19 54v-10h-9z" fill="#eee7ff" stroke="#7654d8" stroke-width="3" stroke-linejoin="round"/><circle cx="23" cy="29" r="3" fill="#7654d8"/><circle cx="32" cy="29" r="3" fill="#7654d8"/><circle cx="41" cy="29" r="3" fill="#7654d8"/></svg></div>
+          <div><h3 data-key="feedbackTitle">Есть вопрос?</h3><p data-key="feedbackText">Напишите нам или пройдите короткий опрос.</p></div>
+        </div>
+        <div class="fc-feedback-actions" id="feedbackList"></div>
+        <button class="fc-add edit-only" id="addFeedbackBtn">＋ Добавить кнопку</button>
+      </article>
+    </section>
+
+    <div class="fc-footer-note"><span>ⓘ Все изменения сохраняются автоматически в вашем браузере на этом устройстве.</span><button class="fc-mini danger edit-only" id="resetBtn">⌫ Сбросить все данные</button></div>
+  </main>
+
+  <button class="fc-preview-exit" id="previewExitBtn">← Вернуться к редактированию</button>
+  <div class="fc-toast" id="toast"></div>
+
+  <div class="fc-modal" id="modal">
+    <div class="fc-modal-card">
+      <h3 id="modalTitle">Редактирование</h3>
+      <div class="fc-form" id="modalForm"></div>
+      <div class="fc-modal-actions"><button class="fc-btn" id="modalCancel">Отмена</button><button class="fc-btn primary" id="modalSave">Сохранить</button></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+const app=document.getElementById('familyClassApp');
+const KEY='klass-i-semya-v3';
+const defaults={
+  text:{className:'7А класс',schoolYear:'2026–2027',teacherName:'Классный руководитель',welcome1:'Здравствуйте, дорогие родители!',welcome2:'Здесь собрана актуальная информация нашего класса: важные даты, объявления, полезные материалы и рекомендации.',welcome3:'Будем рады сотрудничеству!',actualTitle:'Родительское собрание',actualDate:'25 октября',actualTime:'18:00',actualText:'Встречаемся в кабинете №25. Обсудим организационные вопросы и планы на четверть.',actualNote:'Буду рада встрече!',importantLabel:'Важно знать',tipTitle:'Как поддержать ребёнка в учёбе',contactPhone:'+7 (900) 123-45-67',contactTime:'Пн–Пт с 17:00 до 20:00',contactChannel:'Родительский чат',rulesTitle:'Наши правила общения',feedbackTitle:'Есть вопрос?',feedbackText:'Напишите нам или пройдите короткий опрос.'},
+  hidden:{actual:false,dates:false,important:false,schedule:false,tip:false,links:false,materials:false,agreements:false,feedback:false},
+  events:[{date:'12 сентября',title:'День здоровья'},{date:'20 сентября',title:'Родительское собрание'},{date:'4 октября',title:'Экскурсия в музей'},{date:'26 октября',title:'Начало каникул'}],
+  important:['Принести согласие на экскурсию','Проверить дневники','Подготовить спортивную форму','Вернуть книги в библиотеку'],
+  tips:['Интересуйтесь не только оценками, но и успехами.','Помогайте планировать время и отдых.','Создавайте спокойную атмосферу дома.','Замечайте и отмечайте достижения.','Обсуждайте трудности спокойно и вместе ищите решения.'],
+  links:[{title:'Электронный дневник',url:'#'},{title:'Сайт школы',url:'#'},{title:'Школьная библиотека',url:'#'},{title:'Пройти анкету',url:'#'}],
+  materials:[{title:'Памятка: адаптация ребёнка',url:'#',icon:'📄'},{title:'Рекомендации психолога',url:'#',icon:'📙'},{title:'Безопасность в интернете',url:'#',icon:'📗'}],
+  rules:['Личные вопросы обсуждаем индивидуально.','Общий чат используем для информации, которая касается всего класса.','Уважаем личное время всех участников общения.'],
+  feedback:[{title:'Задать вопрос',url:'#'},{title:'Пройти опрос',url:'#'}],
+  schedule:[
+    ['Русский язык','Математика','Русский язык','Математика','История','Физика'],
+    ['Математика','Русский язык','История','Русский язык','Биология','Обществознание'],
+    ['История','Английский язык','Физика','География','Математика','Русский язык'],
+    ['Биология','Физика','Английский язык','Информатика','Литература','Физкультура'],
+    ['Физкультура','ИЗО','Технология','Музыка','Английский язык','']
+  ],
+  heroImage:'',tipImage:'',scheduleImage:'',scheduleMode:'table'
+};
+const DEFAULTS_JSON=JSON.stringify(defaults);
+function freshDefaults(){return JSON.parse(DEFAULTS_JSON)}
+let state=load();let saveTimer=null;let modalHandler=null;
+function deepMerge(a,b){if(Array.isArray(a))return Array.isArray(b)?b:a;if(a&&typeof a==='object'){const o={...a};if(b&&typeof b==='object')Object.keys(b).forEach(k=>o[k]=deepMerge(a[k],b[k]));return o}return b===undefined?a:b}
+function load(){try{return deepMerge(freshDefaults(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){return freshDefaults()}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.warn('Автосохранение недоступно',e)}}
+function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(persist,450)}
+function esc(s){return String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function normalizeExternalUrl(value){
+  const raw=String(value??'').trim();
+  if(!raw||raw==='#')return '#';
+  let candidate=raw;
+  if(/^www\./i.test(candidate))candidate='https://'+candidate;
+  else if(!/^[a-z][a-z0-9+.-]*:/i.test(candidate)){
+    if(/^[^\s]+\.[^\s]+/.test(candidate))candidate='https://'+candidate;
+    else return '';
+  }
+  try{
+    const u=new URL(candidate);
+    if(!['http:','https:','mailto:','tel:'].includes(u.protocol))return '';
+    return u.href;
+  }catch(e){return ''}
+}
+function activeExternalUrl(value){const u=normalizeExternalUrl(value);return u&&u!=='#'?u:''}
+function showToast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),1600)}
+function applyText(){document.querySelectorAll('#familyClassApp [data-key]').forEach(el=>{const k=el.dataset.key;if(state.text[k]!==undefined)el.textContent=state.text[k]})}
+function setEditable(on){app.classList.toggle('edit-mode',on)}
+function applyVisibility(){document.querySelectorAll('#familyClassApp [data-card]').forEach(card=>{const h=!!state.hidden[card.dataset.card];card.classList.toggle('fc-soft-hidden',h);card.classList.toggle('fc-hidden',h&&!app.classList.contains('edit-mode'))})}
+function renderEvents(){const box=document.getElementById('eventsList');box.innerHTML=state.events.map((e,i)=>`<div class="fc-event"><span class="fc-date-dot">${esc(String(i+1).padStart(2,'0'))}</span><b>${esc(e.date)}</b><span>${esc(e.title)}</span><span class="fc-item-actions edit-only"><button class="fc-icon-btn" data-edit-event="${i}" title="Изменить">✎</button><button class="fc-icon-btn danger" data-del-event="${i}" title="Удалить">×</button></span></div>`).join('')}
+function renderImportant(){const box=document.getElementById('importantList');box.innerHTML=state.important.map((t,i)=>`<div class="fc-check"><span class="fc-checkmark">✓</span><span>${esc(t)}</span><span class="fc-item-actions edit-only"><button class="fc-icon-btn" data-edit-important="${i}" title="Изменить">✎</button><button class="fc-icon-btn danger" data-del-important="${i}" title="Удалить">×</button></span></div>`).join('')}
+function renderTips(){document.getElementById('tipsList').innerHTML=state.tips.map((t,i)=>`<div class="fc-bullet"><span style="flex:1">${esc(t)}</span><span class="fc-item-actions edit-only"><button class="fc-icon-btn" data-edit-tip="${i}" title="Изменить">✎</button><button class="fc-icon-btn danger" data-del-tip="${i}" title="Удалить">×</button></span></div>`).join('')}
+function renderLinks(){document.getElementById('linksList').innerHTML=state.links.map((x,i)=>{const u=normalizeExternalUrl(x.url)||'#';return `<div class="fc-link-item"><a class="fc-link-card" href="${esc(u)}" data-pdf-url="${esc(u)}" target="_blank" rel="noopener noreferrer">🔗 ${esc(x.title)}</a><button class="fc-icon-btn edit-only" data-edit-link="${i}" title="Изменить">✎</button><button class="fc-icon-btn danger edit-only" data-del-link="${i}" title="Удалить">×</button></div>`}).join('')}
+function renderMaterials(){document.getElementById('materialsList').innerHTML=state.materials.map((x,i)=>{const u=normalizeExternalUrl(x.url)||'#';return `<div class="fc-material"><span>${esc(x.icon||'📄')}</span><span>${esc(x.title)}</span><a class="fc-open" href="${esc(u)}" data-pdf-url="${esc(u)}" target="_blank" rel="noopener noreferrer">Открыть</a><span class="fc-item-actions edit-only"><button class="fc-icon-btn" data-edit-material="${i}" title="Изменить">✎</button><button class="fc-icon-btn danger" data-del-material="${i}" title="Удалить">×</button></span></div>`}).join('')}
+function renderRules(){document.getElementById('rulesList').innerHTML=state.rules.map((t,i)=>`<div class="fc-bullet"><span style="flex:1">${esc(t)}</span><span class="fc-item-actions edit-only"><button class="fc-icon-btn" data-edit-rule="${i}" title="Изменить">✎</button><button class="fc-icon-btn danger" data-del-rule="${i}" title="Удалить">×</button></span></div>`).join('')}
+function renderFeedback(){document.getElementById('feedbackList').innerHTML=state.feedback.map((x,i)=>{const u=normalizeExternalUrl(x.url)||'#';return `<div class="fc-feedback-item"><a class="fc-open" href="${esc(u)}" data-pdf-url="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a><span class="fc-item-actions edit-only"><button class="fc-icon-btn" data-edit-feedback="${i}" title="Изменить">✎</button><button class="fc-icon-btn danger" data-del-feedback="${i}" title="Удалить">×</button></span></div>`}).join('')}
+function renderSchedule(){const tb=document.querySelector('#scheduleTable tbody');tb.innerHTML=state.schedule.map((row,r)=>`<tr><td>${r+1}</td>${row.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');const isImg=state.scheduleMode==='image'&&state.scheduleImage;document.getElementById('scheduleTableMode').style.display=isImg?'none':'block';document.getElementById('scheduleImageMode').style.display=isImg?'block':'none';if(isImg)document.getElementById('scheduleImage').src=state.scheduleImage}
+function renderImages(){const img=document.getElementById('heroImage'),ph=document.getElementById('heroPlaceholder');if(state.heroImage){img.src=state.heroImage;img.style.display='block';ph.style.display='none'}else{img.style.display='none';ph.style.display='grid'};const tipImg=document.getElementById('tipImage'),tipPh=document.getElementById('tipPlaceholder');if(state.tipImage){tipImg.src=state.tipImage;tipImg.style.display='block';tipPh.style.display='none'}else{tipImg.style.display='none';tipPh.style.display='grid'}}
+function renderAll(){applyText();renderEvents();renderImportant();renderTips();renderLinks();renderMaterials();renderRules();renderFeedback();renderSchedule();renderImages();applyVisibility();setEditable(app.classList.contains('edit-mode'))}
+function openModal(title,fields,onSave){document.getElementById('modalTitle').textContent=title;const form=document.getElementById('modalForm');form.innerHTML=fields.map(f=>`<label>${esc(f.label)}${f.type==='textarea'?`<textarea data-field="${esc(f.name)}">${esc(f.value||'')}</textarea>`:`<input data-field="${esc(f.name)}" type="${esc(f.type||'text')}" value="${esc(f.value||'')}" ${f.type==='url'?'placeholder="https://example.ru/…"':''}>`}</label>`).join('');modalHandler=()=>{const obj={};form.querySelectorAll('[data-field]').forEach(el=>obj[el.dataset.field]=el.value.trim());const result=onSave(obj);if(result===false)return;closeModal()};document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open');modalHandler=null}
+function readFile(file,cb){const r=new FileReader();r.onload=()=>cb(r.result);r.readAsDataURL(file)}
+async function rasterizeExportTarget(target,wrapperClass,wrapperWidth,collectLinks=false){
+  const holder=document.createElement('div');holder.style.position='fixed';holder.style.left='-30000px';holder.style.top='0';holder.style.background='#fff';
+  const wrapper=document.createElement('div');wrapper.id='familyClassApp';wrapper.className=wrapperClass;wrapper.style.width=wrapperWidth+'px';wrapper.appendChild(target);holder.appendChild(wrapper);document.body.appendChild(holder);
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  const rect=target.getBoundingClientRect();const w=Math.ceil(rect.width),h=Math.ceil(rect.height);const css=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');
+  const links=collectLinks?[...target.querySelectorAll('a[data-pdf-url]')].map(a=>{const raw=activeExternalUrl(a.dataset.pdfUrl||a.getAttribute('href'));const r=a.getBoundingClientRect();return{url:raw,x:r.left-rect.left,y:r.top-rect.top,w:r.width,h:r.height}}).filter(x=>x.url&&x.w>0&&x.h>0):[];
+  const serialized=new XMLSerializer().serializeToString(target);
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml"><style>${css}</style><div id="familyClassApp" class="${wrapperClass}" style="width:${wrapperWidth}px">${serialized}</div></div></foreignObject></svg>`;
+  const image=new Image();const url='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  await new Promise((res,rej)=>{image.onload=res;image.onerror=rej;image.src=url});
+  const scale=Math.min(2,Math.max(1,1800/w));const canvas=document.createElement('canvas');canvas.width=Math.ceil(w*scale);canvas.height=Math.ceil(h*scale);const ctx=canvas.getContext('2d');ctx.scale(scale,scale);ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(image,0,0,w,h);holder.remove();return collectLinks?{canvas,links,cssWidth:w,cssHeight:h}:canvas
+}
+async function captureElement(el,mode='full'){
+  if(mode==='card'){
+    const card=el.cloneNode(true);card.classList.remove('fc-soft-hidden','fc-hidden');card.querySelectorAll('.edit-only').forEach(n=>n.remove());card.querySelectorAll('[contenteditable]').forEach(n=>n.removeAttribute('contenteditable'));
+    const cardName=el?.dataset?.card||'';const widths={actual:920,dates:760,important:720,schedule:1180,tip:920};const width=widths[cardName]||900;
+    card.style.width='100%';card.style.height='auto';card.style.minHeight='0';card.style.gridColumn='auto';card.style.alignSelf='start';
+    return rasterizeExportTarget(card,'export-clean export-card-layout',width)
+  }
+  const clone=app.cloneNode(true);clone.classList.remove('edit-mode','preview-mode');clone.classList.add('export-clean');clone.querySelectorAll('.fc-toolbar,.edit-only,.fc-footer-note,.fc-modal,.fc-toast,.fc-preview-exit').forEach(n=>n.remove());clone.querySelectorAll('[contenteditable]').forEach(n=>n.removeAttribute('contenteditable'));clone.querySelectorAll('.fc-soft-hidden').forEach(n=>n.remove());
+  const target=clone.querySelector('#parentPage');
+  if(mode==='pdf')return rasterizeExportTarget(target,'export-clean pdf-export-layout',1060,true);
+  clone.classList.add('export-layout');return rasterizeExportTarget(target,'export-clean export-layout',1400)
+}
+function downloadBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1200)}
+async function downloadPNG(cardName){showToast('Готовим PNG…');const el=cardName?document.querySelector(`[data-card="${cardName}"]`):document.getElementById('parentPage');try{const c=await captureElement(el,cardName?'card':'full');c.toBlob(b=>downloadBlob(b,cardName?`Карточка_${cardName}.png`:'Класс_и_семья.png'),'image/png')}catch(e){console.error(e);showToast('Не удалось создать PNG в этом браузере')}
+}
+function b64ToBytes(dataURL){const b64=dataURL.split(',')[1];const bin=atob(b64);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return arr}
+function strBytes(s){return new TextEncoder().encode(s)}
+function concat(chunks){let len=chunks.reduce((a,b)=>a+b.length,0),out=new Uint8Array(len),p=0;chunks.forEach(c=>{out.set(c,p);p+=c.length});return out}
+function pdfUri(s){try{return encodeURI(String(s||''))}catch(e){return String(s||'')}}
+function pdfString(s){return pdfUri(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)')}
+function buildPdfFromJpegs(images){
+  const pageW=595.28,pageH=841.89;let objects=[];const add=(chunks)=>{objects.push(Array.isArray(chunks)?chunks:[strBytes(chunks)]);return objects.length};
+  const catalogId=add('');const pagesId=add('');const pageIds=[];
+  images.forEach((img,idx)=>{
+    const imgId=add([strBytes(`<< /Type /XObject /Subtype /Image /Width ${img.width} /Height ${img.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${img.bytes.length} >>\nstream\n`),img.bytes,strBytes('\nendstream')]);
+    const content=`q\n${pageW} 0 0 ${pageH} 0 0 cm\n/Im${idx+1} Do\nQ`;const contentId=add(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
+    const annotIds=(img.links||[]).map(l=>{const x1=(l.x/img.width*pageW).toFixed(2),x2=((l.x+l.w)/img.width*pageW).toFixed(2),y1=(pageH-(l.y+l.h)/img.height*pageH).toFixed(2),y2=(pageH-l.y/img.height*pageH).toFixed(2);return add(`<< /Type /Annot /Subtype /Link /Rect [${x1} ${y1} ${x2} ${y2}] /Border [0 0 0] /H /I /F 4 /A << /S /URI /URI (${pdfString(l.url)}) >> >>`) });
+    const annots=annotIds.length?` /Annots [${annotIds.map(id=>id+' 0 R').join(' ')}]`:'';
+    const pageId=add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${pageW} ${pageH}] /Resources << /XObject << /Im${idx+1} ${imgId} 0 R >> >> /Contents ${contentId} 0 R${annots} >>`);pageIds.push(pageId)
+  });
+  objects[catalogId-1]=[strBytes(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`)];objects[pagesId-1]=[strBytes(`<< /Type /Pages /Kids [${pageIds.map(id=>id+' 0 R').join(' ')}] /Count ${pageIds.length} >>`)];
+  const chunks=[strBytes('%PDF-1.4\n%âãÏÓ\n')],offsets=[0];let pos=chunks[0].length;
+  objects.forEach((obj,i)=>{offsets[i+1]=pos;const head=strBytes(`${i+1} 0 obj\n`),tail=strBytes('\nendobj\n');chunks.push(head,...obj,tail);pos+=head.length+obj.reduce((a,b)=>a+b.length,0)+tail.length});const xrefPos=pos;let x=`xref\n0 ${objects.length+1}\n0000000000 65535 f \n`;for(let i=1;i<=objects.length;i++)x+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';x+=`trailer\n<< /Size ${objects.length+1} /Root ${catalogId} 0 R >>\nstartxref\n${xrefPos}\n%%EOF`;chunks.push(strBytes(x));return new Blob([concat(chunks)],{type:'application/pdf'})
+}
+async function downloadPDF(){showToast('Готовим PDF…');try{
+  const exp=await captureElement(document.getElementById('parentPage'),'pdf');const full=exp.canvas;const pageRatio=297/210;const pageW=full.width;const pageH=Math.round(pageW*pageRatio);const part=document.createElement('canvas');part.width=pageW;part.height=pageH;const ctx=part.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,pageW,pageH);const scale=Math.min(pageW/full.width,pageH/full.height);const dw=Math.round(full.width*scale),dh=Math.round(full.height*scale);const dx=Math.round((pageW-dw)/2),dy=Math.round((pageH-dh)/2);ctx.drawImage(full,0,0,full.width,full.height,dx,dy,dw,dh);
+  const links=(exp.links||[]).map(l=>({url:l.url,x:dx+(l.x/exp.cssWidth)*dw,y:dy+(l.y/exp.cssHeight)*dh,w:(l.w/exp.cssWidth)*dw,h:(l.h/exp.cssHeight)*dh}));
+  const data=part.toDataURL('image/jpeg',.95);downloadBlob(buildPdfFromJpegs([{bytes:b64ToBytes(data),width:part.width,height:part.height,links}]),'Класс_и_семья.pdf')
+}catch(e){console.error(e);showToast('PDF не создан — попробуйте печать браузера')}
+}
+
+function openScheduleEditor(){
+  const days=['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+  document.getElementById('modalTitle').textContent='Заполнить расписание';
+  const form=document.getElementById('modalForm');
+  let draft=state.schedule.map(row=>days.map((_,c)=>String(row?.[c]??'')));
+  if(!draft.length)draft=[days.map(()=> '')];
+
+  function collectDraft(){
+    form.querySelectorAll('[data-sched-input]').forEach(el=>{
+      const [r,c]=el.dataset.schedInput.split(',').map(Number);
+      if(draft[r])draft[r][c]=el.value;
+    });
+  }
+  function renderEditor(){
+    form.innerHTML=`<div class="fc-soft-note">Заполните нужные уроки. Количество уроков можно менять кнопками «＋ Добавить урок» и «×». Если в субботу занятий нет, оставьте ячейки пустыми.</div><div class="fc-schedule-editor"><table><thead><tr><th>№</th>${days.map(d=>`<th>${d}</th>`).join('')}<th aria-label="Удалить строку"></th></tr></thead><tbody>${draft.map((row,r)=>`<tr><td>${r+1}</td>${days.map((_,c)=>`<td><input data-sched-input="${r},${c}" value="${esc(row[c]??'')}"></td>`).join('')}<td><button type="button" class="fc-icon-btn danger" data-sched-remove="${r}" title="Удалить этот урок" aria-label="Удалить урок ${r+1}">×</button></td></tr>`).join('')}</tbody></table></div><button type="button" class="fc-add" id="addScheduleRowBtn">＋ Добавить урок</button>`;
+    form.querySelectorAll('[data-sched-remove]').forEach(btn=>btn.onclick=()=>{
+      collectDraft();
+      if(draft.length<=1){showToast('В расписании должна остаться хотя бы одна строка');return}
+      draft.splice(Number(btn.dataset.schedRemove),1);
+      renderEditor();
+    });
+    document.getElementById('addScheduleRowBtn').onclick=()=>{
+      collectDraft();
+      draft.push(days.map(()=>''));
+      renderEditor();
+      const editor=form.querySelector('.fc-schedule-editor');
+      if(editor)editor.scrollTop=editor.scrollHeight;
+    };
+  }
+  renderEditor();
+  modalHandler=()=>{
+    collectDraft();
+    state.schedule=draft.map(row=>days.map((_,c)=>String(row[c]??'').trim()));
+    state.scheduleMode='table';renderSchedule();queueSave();closeModal()
+  };
+  document.getElementById('modal').classList.add('open')
+}
+function openCardEditor(card){
+  if(card==='hero')return openModal('Данные класса',[{label:'Класс',name:'className',value:state.text.className},{label:'Учебный год',name:'schoolYear',value:state.text.schoolYear},{label:'Классный руководитель',name:'teacherName',value:state.text.teacherName},{label:'Приветствие',name:'welcome1',value:state.text.welcome1},{label:'Основной текст',name:'welcome2',type:'textarea',value:state.text.welcome2},{label:'Финальная строка',name:'welcome3',value:state.text.welcome3}],o=>{Object.assign(state.text,o);applyText();queueSave()});
+  if(card==='actual')return openModal('Карточка «Актуально»',[{label:'Заголовок',name:'actualTitle',value:state.text.actualTitle},{label:'Дата',name:'actualDate',value:state.text.actualDate},{label:'Время',name:'actualTime',value:state.text.actualTime},{label:'Основной текст',name:'actualText',type:'textarea',value:state.text.actualText},{label:'Акцентная строка',name:'actualNote',value:state.text.actualNote}],o=>{Object.assign(state.text,o);applyText();queueSave()});
+  if(card==='important')return openModal('Блок «Важно знать»',[{label:'Название блока',name:'importantLabel',value:state.text.importantLabel}],o=>{Object.assign(state.text,o);applyText();queueSave()});
+  if(card==='schedule')return openScheduleEditor();
+  if(card==='tip')return openModal('Блок «Родителям на заметку»',[{label:'Заголовок',name:'tipTitle',value:state.text.tipTitle}],o=>{Object.assign(state.text,o);applyText();queueSave()});
+  if(card==='agreements')return openModal('Наши договорённости',[{label:'Связь с классным руководителем',name:'contactPhone',value:state.text.contactPhone},{label:'Удобное время для связи',name:'contactTime',value:state.text.contactTime},{label:'Основной канал связи',name:'contactChannel',value:state.text.contactChannel},{label:'Заголовок правил',name:'rulesTitle',value:state.text.rulesTitle}],o=>{Object.assign(state.text,o);applyText();queueSave()});
+  if(card==='feedback')return openModal('Обратная связь',[{label:'Заголовок',name:'feedbackTitle',value:state.text.feedbackTitle},{label:'Текст',name:'feedbackText',type:'textarea',value:state.text.feedbackText}],o=>{Object.assign(state.text,o);applyText();queueSave()});
+}
+function openItemEditor(key,i){
+  if(key==='events'){const x=state.events[i];return openModal('Изменить событие',[{label:'Дата',name:'date',value:x.date},{label:'Название события',name:'title',value:x.title}],o=>{state.events[i]=o;renderEvents();queueSave()})}
+  if(key==='important')return openModal('Изменить пункт',[{label:'Текст',name:'text',type:'textarea',value:state.important[i]}],o=>{if(o.text){state.important[i]=o.text;renderImportant();queueSave()}})
+  if(key==='tips')return openModal('Изменить рекомендацию',[{label:'Текст',name:'text',type:'textarea',value:state.tips[i]}],o=>{if(o.text){state.tips[i]=o.text;renderTips();queueSave()}})
+  if(key==='links'){const x=state.links[i];return openModal('Изменить ссылку',[{label:'Название',name:'title',value:x.title},{label:'Ссылка (https://…)',name:'url',type:'url',value:x.url}],o=>{const u=normalizeExternalUrl(o.url);if(o.url&&o.url!=='#'&&!u){showToast('Проверьте адрес ссылки: нужен полный URL');return false}state.links[i]={title:o.title,url:u||'#'};renderLinks();queueSave()})}
+  if(key==='materials'){const x=state.materials[i];return openModal('Изменить материал',[{label:'Название',name:'title',value:x.title},{label:'Ссылка (https://…)',name:'url',type:'url',value:x.url}],o=>{const u=normalizeExternalUrl(o.url);if(o.url&&o.url!=='#'&&!u){showToast('Проверьте адрес ссылки: нужен полный URL');return false}state.materials[i]={...x,title:o.title,url:u||'#'};renderMaterials();queueSave()})}
+  if(key==='rules')return openModal('Изменить правило',[{label:'Текст',name:'text',type:'textarea',value:state.rules[i]}],o=>{if(o.text){state.rules[i]=o.text;renderRules();queueSave()}})
+  if(key==='feedback'){const x=state.feedback[i];return openModal('Изменить кнопку',[{label:'Название',name:'title',value:x.title},{label:'Ссылка (https://…)',name:'url',type:'url',value:x.url}],o=>{const u=normalizeExternalUrl(o.url);if(o.url&&o.url!=='#'&&!u){showToast('Проверьте адрес ссылки: нужен полный URL');return false}state.feedback[i]={title:o.title,url:u||'#'};renderFeedback();queueSave()})}
+}
+app.addEventListener('click',e=>{
+  const t=e.target.closest('button,a');if(!t)return;
+  if(t.matches('[data-edit-card]')){openCardEditor(t.dataset.editCard);return}
+  const edits=[['editEvent','events'],['editImportant','important'],['editTip','tips'],['editLink','links'],['editMaterial','materials'],['editRule','rules'],['editFeedback','feedback']];for(const [d,key] of edits){if(t.dataset[d]!==undefined){openItemEditor(key,+t.dataset[d]);return}}
+  if(t.matches('[data-toggle-card]')){const k=t.dataset.toggleCard;state.hidden[k]=!state.hidden[k];applyVisibility();queueSave();return}
+  if(t.matches('[data-card-png]')){downloadPNG(t.dataset.cardPng);return}
+  const dels=[['delEvent','events'],['delImportant','important'],['delTip','tips'],['delLink','links'],['delMaterial','materials'],['delRule','rules'],['delFeedback','feedback']];for(const [d,key] of dels){if(t.dataset[d]!==undefined){state[key].splice(+t.dataset[d],1);renderAll();queueSave();return}}
+});
+
+function exitPreview(){app.classList.remove('preview-mode');setEditable(true);applyVisibility();renderSchedule();window.scrollTo({top:0,behavior:'smooth'})}
+document.getElementById('editBtn').onclick=exitPreview;
+document.getElementById('previewExitBtn').onclick=exitPreview;
+document.getElementById('previewBtn').onclick=()=>{setEditable(false);app.classList.add('preview-mode');applyVisibility();window.scrollTo({top:0,behavior:'smooth'});showToast('Предпросмотр: кнопки редактора скрыты')};
+document.getElementById('pngBtn').onclick=()=>downloadPNG();
+document.getElementById('pdfBtn').onclick=downloadPDF;
+document.getElementById('helpBtn').onclick=()=>{document.getElementById('modalTitle').textContent='Как работать с конструктором';document.getElementById('modalForm').innerHTML=`<div class="fc-help-step"><span class="fc-help-num">1</span><div><b>Заполните данные класса.</b><br>Класс, учебный год, классный руководитель и приветствие.</div></div><div class="fc-help-step"><span class="fc-help-num">2</span><div><b>Измените содержание карточек.</b><br>Нажмите кнопку «Изменить» в нужной карточке и заполните поля в окне редактирования.</div></div><div class="fc-help-step"><span class="fc-help-num">3</span><div><b>Добавляйте нужное.</b><br>События, пункты, ссылки, материалы и кнопки обратной связи.</div></div><div class="fc-help-step"><span class="fc-help-num">4</span><div><b>Скрывайте лишние блоки.</b><br>Нажмите значок ◉ в нужной карточке. Данные не удаляются.</div></div><div class="fc-help-step"><span class="fc-help-num">5</span><div><b>Проверьте страницу.</b><br>Кнопка «Предпросмотр» покажет чистую версию для родителей.</div></div><div class="fc-help-step"><span class="fc-help-num">6</span><div><b>Передайте родителям.</b><br>Скачайте всю страницу PDF/PNG или отдельную карточку PNG.</div></div>`;document.getElementById('modal').classList.add('open');modalHandler=closeModal};
+document.getElementById('modalCancel').onclick=closeModal;document.getElementById('modalSave').onclick=()=>modalHandler&&modalHandler();document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+
+document.getElementById('addEventBtn').onclick=()=>openModal('Добавить событие',[{label:'Дата',name:'date'},{label:'Название события',name:'title'}],o=>{if(o.date||o.title)state.events.push(o);renderEvents();queueSave()});
+document.getElementById('addImportantBtn').onclick=()=>openModal('Добавить важный пункт',[{label:'Текст',name:'text',type:'textarea'}],o=>{if(o.text)state.important.push(o.text);renderImportant();queueSave()});
+document.getElementById('addTipBtn').onclick=()=>openModal('Добавить рекомендацию',[{label:'Рекомендация',name:'text',type:'textarea'}],o=>{if(o.text)state.tips.push(o.text);renderTips();queueSave()});
+document.getElementById('addLinkBtn').onclick=()=>openModal('Добавить ссылку',[{label:'Название кнопки',name:'title'},{label:'Ссылка (https://…)',name:'url',type:'url'}],o=>{const u=normalizeExternalUrl(o.url);if(o.url&&o.url!=='#'&&!u){showToast('Проверьте адрес ссылки: нужен полный URL');return false}if(o.title){state.links.push({title:o.title,url:u||'#'});renderLinks();queueSave()}});
+document.getElementById('addMaterialBtn').onclick=()=>openModal('Добавить материал',[{label:'Название материала',name:'title'},{label:'Ссылка (https://…)',name:'url',type:'url'}],o=>{const u=normalizeExternalUrl(o.url);if(o.url&&o.url!=='#'&&!u){showToast('Проверьте адрес ссылки: нужен полный URL');return false}if(o.title){state.materials.push({title:o.title,url:u||'#',icon:'📄'});renderMaterials();queueSave()}});
+document.getElementById('addRuleBtn').onclick=()=>openModal('Добавить правило',[{label:'Правило',name:'text',type:'textarea'}],o=>{if(o.text)state.rules.push(o.text);renderRules();queueSave()});
+document.getElementById('addFeedbackBtn').onclick=()=>openModal('Добавить кнопку',[{label:'Название',name:'title'},{label:'Ссылка (https://…)',name:'url',type:'url'}],o=>{const u=normalizeExternalUrl(o.url);if(o.url&&o.url!=='#'&&!u){showToast('Проверьте адрес ссылки: нужен полный URL');return false}if(o.title){state.feedback.push({title:o.title,url:u||'#'});renderFeedback();queueSave()}});
+
+document.getElementById('heroFile').onchange=e=>{const f=e.target.files[0];if(f)readFile(f,d=>{state.heroImage=d;renderImages();queueSave()})};
+document.getElementById('tipFile').onchange=e=>{const f=e.target.files[0];if(f)readFile(f,d=>{state.tipImage=d;renderImages();queueSave()})};
+document.getElementById('scheduleFile').onchange=e=>{const f=e.target.files[0];if(f)readFile(f,d=>{state.scheduleImage=d;state.scheduleMode='image';renderSchedule();queueSave()})};
+document.getElementById('scheduleTableBtn').onclick=()=>{state.scheduleMode='table';renderSchedule();queueSave()};
+document.getElementById('fillScheduleBtn').onclick=openScheduleEditor;
+document.getElementById('resetBtn').onclick=()=>{if(confirm('Удалить все введённые данные и вернуть исходный шаблон?')){try{localStorage.removeItem(KEY)}catch(e){}state=freshDefaults();renderAll();persist()}};
+
+renderAll();persist();
+})();
+</script>
+</body>
+</html>
